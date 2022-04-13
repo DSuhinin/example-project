@@ -31,6 +31,7 @@ func NewClient(baseURL, token string) *Client {
 
 // GetExchangeRate returns current exchange rate.
 func (c Client) GetExchangeRate() (float64, error) {
+	//nolint
 	resp, err := http.Get(
 		fmt.Sprintf("%s/latest?access_key=%s&base=EUR&symbols=USD", c.baseURL, c.token),
 	)
@@ -39,8 +40,10 @@ func (c Client) GetExchangeRate() (float64, error) {
 	}
 
 	if resp == nil {
-		return 0, errors.Wrap(err, "fixer service returned empty response")
+		return 0, errors.Wrap(err, "fixer service returned an empty response")
 	}
+	//nolint
+	defer resp.Body.Close()
 
 	if resp.StatusCode != http.StatusOK {
 		return 0, errors.Errorf("fixer service returned non 200 status code: %d", resp.StatusCode)

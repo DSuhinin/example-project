@@ -1,6 +1,7 @@
 package app
 
 import (
+	"github.com/DSuhinin/passbase-test-task/core/errors"
 	"github.com/gin-gonic/gin"
 
 	"github.com/DSuhinin/passbase-test-task/app/config"
@@ -30,10 +31,13 @@ func NewRouter(
 	config *config.Config,
 	controller *controller.Controller,
 	keysRepository dao.KeysRepositoryProvider,
-) *Router {
+) (*Router, error) {
 	g := gin.New()
 	g.Use(gin.Recovery())
-	g.SetTrustedProxies(nil)
+
+	if err := g.SetTrustedProxies(nil); err != nil {
+		return nil, errors.Wrap(err, "error configuring router")
+	}
 
 	g.POST(
 		CreateKeyRoute,
@@ -76,7 +80,7 @@ func NewRouter(
 	return &Router{
 		config:    config,
 		ginEngine: g,
-	}
+	}, nil
 }
 
 // Start starts application routing.

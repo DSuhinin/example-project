@@ -20,6 +20,7 @@ func NewKey(key *model.Key) Key {
 func NewKeys(keys []model.Key) []Key {
 	result := make([]Key, 0, len(keys))
 	for _, key := range keys {
+		key := key
 		result = append(result, NewKey(&key))
 	}
 	return result

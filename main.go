@@ -40,7 +40,7 @@ func main() {
 	}
 
 	// 4. create main router and run service.
-	router := app.NewRouter(appCfg, controller.New(
+	router, err := app.NewRouter(appCfg, controller.New(
 		keys.NewService(
 			dao.NewKeysRepository(dbConnection),
 		),
@@ -48,6 +48,12 @@ func main() {
 			fixer.NewClient(appCfg.FixerAPIBaseURL, appCfg.FixerAPIKey),
 		),
 	), dao.NewKeysRepository(dbConnection))
+	if err != nil {
+		log.WithFields(log.Fields{
+			"err": err,
+		}).Fatal("error configuring `router")
+	}
+
 	if err := router.Start(); err != nil {
 		log.WithFields(log.Fields{
 			"err": err,
