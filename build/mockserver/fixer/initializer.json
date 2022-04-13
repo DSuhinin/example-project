@@ -1,0 +1,21 @@
+[{
+  "httpRequest": {
+    "method": "GET",
+    "path": "/latest"
+  },
+  "httpResponse": {
+    "statusCode": 200,
+    "headers": {
+      "Content-Type": ["application/json"]
+    },
+    "body": {
+      "success": true,
+      "timestamp": 1649868724,
+      "base": "EUR",
+      "date": "2022-04-13",
+      "rates": {
+        "USD": 1.088293
+      }
+    }
+  }
+}]

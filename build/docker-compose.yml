@@ -1,0 +1,60 @@
+version: '3'
+services:
+  currency-exchange-service-test:
+    image: currency-exchange-service
+    depends_on:
+      - currency-exchange-service-fixer
+      - currency-exchange-service-postgres
+    ports:
+      - "8080:8080"
+    env_file:
+      - currency-exchange-service-test.env
+    container_name: currency-exchange-service
+
+  currency-exchange-service-demo:
+    image: currency-exchange-service
+    depends_on:
+      - currency-exchange-service-fixer
+      - currency-exchange-service-postgres
+    ports:
+      - "8080:8080"
+    env_file:
+      - currency-exchange-service-demo.env
+    container_name: currency-exchange-service
+
+  currency-exchange-service-fixer:
+    image: mockserver/mockserver:mockserver-5.9.0
+    ports:
+      - "1080"
+    environment:
+      MOCKSERVER_PROPERTY_FILE: /config/mockserver.properties
+      MOCKSERVER_INITIALIZATION_JSON_PATH: /config/initializer.json
+    volumes:
+      - ./mockserver/fixer:/config
+
+  currency-exchange-service-postgres:
+    image: postgres:11.2
+    restart: always
+    environment:
+      POSTGRES_USER: root
+      POSTGRES_PASSWORD: root
+      POSTGRES_DB: public
+    ports:
+      - "5432:5432"
+    container_name: currency-exchange-service-postgres
+
+  integration-tests:
+    build:
+      context: ../
+      dockerfile: build/test/integration/Dockerfile
+    external_links:
+      - currency-exchange-service:currency-exchange-service
+    env_file:
+      - currency-exchange-service-test.env
+    environment:
+      SERVICE_BASE_URL: currency-exchange-service:8080
+
+  goose-migrate:
+    build:
+      context: goose
+    command: bash -c 'psql postgres://root:root@currency-exchange-service-postgres:5432/public -f build/db/schema.sql'

@@ -1,0 +1,244 @@
+openapi: 3.0.0
+info:
+  version: "1.0.0"
+  title: Passbase Currency Exchange Test Sefvice.
+servers:
+  - url: "https://127.0.0.1"
+    description: "localhost"
+tags:
+  - name: keys
+    description: Keys endpoints
+  - name: currencies
+    description: Currencies endpoints
+
+
+paths:
+  /keys:
+    post:
+      tags:
+        - keys
+      summary: "Create Key"
+      responses:
+        200:
+          description: success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CreateKeyResponse'
+        500:
+          description: internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+              examples:
+                InternalServerError:
+                  value:
+                    code: 100000
+                    message: "internal server error"
+      security:
+        - AdminAuth: [ ]
+
+    get:
+      tags:
+        - keys
+      summary: "Get Keys"
+      responses:
+        200:
+          description: success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetKeysResponse'
+        500:
+          description: internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+              examples:
+                InternalServerError:
+                  value:
+                    code: 100000
+                    message: "internal server error"
+      security:
+        - AdminAuth: [ ]
+
+  /keys/{key_id}:
+    delete:
+      tags:
+        - keys
+      summary: "Get Key"
+      parameters:
+        - name: key_id
+          in: path
+          required: true
+          description: Key ID
+          schema:
+            type: string
+      responses:
+        200:
+          description: success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetKeyResponse'
+        404:
+          description: not found
+        500:
+          description: internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+              examples:
+                InternalServerError:
+                  value:
+                    code: 100000
+                    message: "internal server error"
+      security:
+        - AdminAuth: [ ]
+
+  /keys/{key_id}/regenerate:
+    put:
+      tags:
+        - keys
+      summary: "Regenerate existing Key"
+      parameters:
+        - name: key_id
+          in: path
+          required: true
+          description: Key ID.
+          schema:
+            type: string
+      responses:
+        200:
+          description: success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RegenerateKeyResponse'
+        404:
+          description: not found
+        500:
+          description: internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+              examples:
+                InternalServerError:
+                  value:
+                    code: 100000
+                    message: "internal server error"
+      security:
+        - AdminAuth: [ ]
+
+  /currencies/exchange:
+    get:
+      tags:
+        - currencies
+      summary: "Get currency exchange rate"
+      parameters:
+        - name: from
+          in: query
+          required: true
+          description: Currency being exchanged
+          schema:
+            type: string
+        - name: to
+          in: query
+          required: true
+          description: Currency to be exchanged
+          schema:
+            type: string
+        - name: amount
+          in: query
+          required: true
+          description: Amount to be exchanged
+          schema:
+            type: string
+      responses:
+        200:
+          description: success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ExchangeCurrencyResponse'
+        400:
+          description: bad request
+        500:
+          description: internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+              examples:
+                InternalServerError:
+                  value:
+                    code: 100000
+                    message: "internal server error"
+      security:
+        - KeyAuth: [ ]
+
+components:
+  securitySchemes:
+    AdminAuth:
+      type: apiKey
+      in: header
+      name: Authorization
+      description: 'Authorization: Admin token'
+    KeyAuth:
+      type: apiKey
+      in: header
+      name: Authorization
+      description: 'Authorization: Key token'
+
+  schemas:
+    ErrorResponse:
+      type: object
+      properties:
+        code:
+          type: integer
+        message:
+          type: string
+
+    CreateKeyResponse:
+      type: object
+      properties:
+        id:
+          type: integer
+        key:
+          type: string
+
+    GetKeysResponse:
+      type: array
+      items:
+        type: object
+        properties:
+          id:
+            type: integer
+          key:
+            type: string
+
+    GetKeyResponse:
+      type: object
+      properties:
+        id:
+          type: integer
+        key:
+          type: string
+
+    RegenerateKeyResponse:
+      type: object
+      properties:
+        id:
+          type: integer
+        key:
+          type: string
+
+    ExchangeCurrencyResponse:
+      type: object
+      properties:
+        result:
+          type: number
