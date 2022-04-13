@@ -10,7 +10,7 @@ ARG PATH_GO_SOURCES=/go/src/$GO_SERVICE_IMPORT_PATH
 #
 # Build Go binary inside base container.
 #
-FROM golang:1.16 as base_go_docker_image
+FROM golang:1.16
 # Stage arguments
 ARG PATH_GO_SOURCES
 ARG GO_SERVICE_IMPORT_PATH

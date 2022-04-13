@@ -25,6 +25,7 @@ require (
 	github.com/sfreiberg/gotwilio v0.0.0-20201211181435-c426a3710ab5
 	github.com/sirupsen/logrus v1.8.1 // indirect
 	github.com/slack-go/slack v0.7.4
+	github.com/stretchr/testify v1.7.1 // indirect
 	github.com/ugorji/go v1.2.7 // indirect
 	golang.org/x/crypto v0.0.0-20220411220226-7b82a4e95df4
 	golang.org/x/sys v0.0.0-20220412071739-889880a91fd5 // indirect

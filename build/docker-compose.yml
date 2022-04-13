@@ -9,7 +9,7 @@ services:
       - "8080:8080"
     env_file:
       - currency-exchange-service-test.env
-    container_name: currency-exchange-service
+    container_name: currency-exchange-service-test
 
   currency-exchange-service-demo:
     image: currency-exchange-service
@@ -20,7 +20,7 @@ services:
       - "8080:8080"
     env_file:
       - currency-exchange-service-demo.env
-    container_name: currency-exchange-service
+    container_name: currency-exchange-service-demo
 
   currency-exchange-service-fixer:
     image: mockserver/mockserver:mockserver-5.9.0
@@ -48,11 +48,11 @@ services:
       context: ../
       dockerfile: build/test/integration/Dockerfile
     external_links:
-      - currency-exchange-service:currency-exchange-service
+      - currency-exchange-service-test:currency-exchange-service-test
     env_file:
       - currency-exchange-service-test.env
     environment:
-      SERVICE_BASE_URL: currency-exchange-service:8080
+      SERVICE_BASE_URL: http://currency-exchange-service-test:8080
 
   goose-migrate:
     build:
