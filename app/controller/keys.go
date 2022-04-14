@@ -19,7 +19,7 @@ func (c Controller) CreateKey(ctx *gin.Context) {
 		return
 	}
 
-	ctx.JSON(http.StatusOK, response.NewKey(key))
+	ctx.JSON(http.StatusCreated, response.NewKey(key))
 }
 
 // GetKeys handles `GET /keys` route.
@@ -48,5 +48,5 @@ func (c Controller) DeleteKey(ctx *gin.Context) {
 		errors.SetHTTPError(ctx, err)
 		return
 	}
-	ctx.Status(http.StatusOK)
+	ctx.Status(http.StatusNoContent)
 }

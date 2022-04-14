@@ -22,20 +22,21 @@ import (
 	"github.com/DSuhinin/passbase-test-task/app/api/response"
 	"github.com/DSuhinin/passbase-test-task/app/config"
 	"github.com/DSuhinin/passbase-test-task/test/fixtures"
+	"github.com/DSuhinin/passbase-test-task/test/helper"
 )
 
-type CreateKeyTestSuite struct {
+type RegenerateKeyTestSuite struct {
 	suite.Suite
 	fixtures *fixtures.Fixtures
 }
 
-// TestCreateKey is an entry point to run all tests in current Test Suite.
-func TestCreateKey(t *testing.T) {
-	suite.Run(t, new(CreateKeyTestSuite))
+// TestRegenerateKey is an entry point to run all tests in current Test Suite.
+func TestRegenerateKey(t *testing.T) {
+	suite.Run(t, new(RegenerateKeyTestSuite))
 }
 
 // SetupSuite prepare everything for tests.
-func (s *CreateKeyTestSuite) SetupSuite() {
+func (s *RegenerateKeyTestSuite) SetupSuite() {
 	// 1. init config.
 	appConfig, err := config.New()
 	assert.Nil(s.T(), err)
@@ -54,16 +55,21 @@ func (s *CreateKeyTestSuite) SetupSuite() {
 	s.fixtures = fixtures.NewFixtures(dbConnection)
 }
 
-// TestCreateKey_OK makes test of `POST /keys` for success case.
-func (s *CreateKeyTestSuite) TestCreateKey_OK() {
+// TestRegenerateKey_OK makes test of `GET /keys/:key_id/regenerate` for success case.
+func (s *RegenerateKeyTestSuite) TestRegenerateKey_OK() {
+	assert.Nil(s.T(), s.fixtures.LoadRegenerateKeyData())
 	defer func() {
 		assert.Nil(s.T(), s.fixtures.UnloadFixtures())
 	}()
 
 	req, err := http.NewRequestWithContext(
 		context.Background(),
-		http.MethodPost,
-		fmt.Sprintf("%s%s", os.Getenv("SERVICE_BASE_URL"), app.CreateKeyRoute),
+		http.MethodPut,
+		helper.StrReplace(
+			fmt.Sprintf("%s%s", os.Getenv("SERVICE_BASE_URL"), app.RegenerateKeyRoute),
+			[]string{":key_id"},
+			[]interface{}{1},
+		),
 		nil,
 	)
 	req.Header.Set("Authorization", fmt.Sprintf("AdminKey %s", "supersecurekey"))
@@ -73,7 +79,7 @@ func (s *CreateKeyTestSuite) TestCreateKey_OK() {
 	resp, err := client.Do(req)
 	assert.Nil(s.T(), err)
 	assert.NotNil(s.T(), resp.Body)
-	assert.Equal(s.T(), http.StatusCreated, resp.StatusCode)
+	assert.Equal(s.T(), http.StatusOK, resp.StatusCode)
 
 	body, err := ioutil.ReadAll(resp.Body)
 	assert.Nil(s.T(), err)
@@ -87,14 +93,24 @@ func (s *CreateKeyTestSuite) TestCreateKey_OK() {
 
 	_, err = uuid.FromString(response.Value)
 	assert.Nil(s.T(), err)
+	assert.NotEqual(s.T(), "e12a1983-046a-4f2c-b5a2-e27a6851ec4c", response.Value)
 }
 
-// TestCreateKey_AuthError makes test of `POST /keys` for Auth error case.
-func (s *CreateKeyTestSuite) TestCreateKey_AuthError() {
+// TestRegenerateKey_AuthError makes test of `GET /keys/:key_id/regenerate` for Auth error case.
+func (s *CreateKeyTestSuite) TestRegenerateKey_AuthError() {
+	assert.Nil(s.T(), s.fixtures.LoadRegenerateKeyData())
+	defer func() {
+		assert.Nil(s.T(), s.fixtures.UnloadFixtures())
+	}()
+
 	req, err := http.NewRequestWithContext(
 		context.Background(),
-		http.MethodPost,
-		fmt.Sprintf("%s%s", os.Getenv("SERVICE_BASE_URL"), app.CreateKeyRoute),
+		http.MethodPut,
+		helper.StrReplace(
+			fmt.Sprintf("%s%s", os.Getenv("SERVICE_BASE_URL"), app.RegenerateKeyRoute),
+			[]string{":key_id"},
+			[]interface{}{1},
+		),
 		nil,
 	)
 	req.Header.Set("Authorization", "AdminKey incorrectkey")

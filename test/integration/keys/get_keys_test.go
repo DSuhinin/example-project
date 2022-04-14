@@ -11,7 +11,6 @@ import (
 	"os"
 	"testing"
 
-	uuid "github.com/satori/go.uuid"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/suite"
 
@@ -21,21 +20,22 @@ import (
 	"github.com/DSuhinin/passbase-test-task/app"
 	"github.com/DSuhinin/passbase-test-task/app/api/response"
 	"github.com/DSuhinin/passbase-test-task/app/config"
+	"github.com/DSuhinin/passbase-test-task/test/data"
 	"github.com/DSuhinin/passbase-test-task/test/fixtures"
 )
 
-type CreateKeyTestSuite struct {
+type GetKeysTestSuite struct {
 	suite.Suite
 	fixtures *fixtures.Fixtures
 }
 
-// TestCreateKey is an entry point to run all tests in current Test Suite.
-func TestCreateKey(t *testing.T) {
-	suite.Run(t, new(CreateKeyTestSuite))
+// TestGetKeys is an entry point to run all tests in current Test Suite.
+func TestGetKeys(t *testing.T) {
+	suite.Run(t, new(GetKeysTestSuite))
 }
 
 // SetupSuite prepare everything for tests.
-func (s *CreateKeyTestSuite) SetupSuite() {
+func (s *GetKeysTestSuite) SetupSuite() {
 	// 1. init config.
 	appConfig, err := config.New()
 	assert.Nil(s.T(), err)
@@ -54,16 +54,17 @@ func (s *CreateKeyTestSuite) SetupSuite() {
 	s.fixtures = fixtures.NewFixtures(dbConnection)
 }
 
-// TestCreateKey_OK makes test of `POST /keys` for success case.
-func (s *CreateKeyTestSuite) TestCreateKey_OK() {
+// TestGetKeys_OK makes test of `GET /keys` for success case.
+func (s *GetKeysTestSuite) TestGetKeys_OK() {
+	assert.Nil(s.T(), s.fixtures.LoadGetGetKeysData())
 	defer func() {
 		assert.Nil(s.T(), s.fixtures.UnloadFixtures())
 	}()
 
 	req, err := http.NewRequestWithContext(
 		context.Background(),
-		http.MethodPost,
-		fmt.Sprintf("%s%s", os.Getenv("SERVICE_BASE_URL"), app.CreateKeyRoute),
+		http.MethodGet,
+		fmt.Sprintf("%s%s", os.Getenv("SERVICE_BASE_URL"), app.GetKeysRoute),
 		nil,
 	)
 	req.Header.Set("Authorization", fmt.Sprintf("AdminKey %s", "supersecurekey"))
@@ -73,28 +74,29 @@ func (s *CreateKeyTestSuite) TestCreateKey_OK() {
 	resp, err := client.Do(req)
 	assert.Nil(s.T(), err)
 	assert.NotNil(s.T(), resp.Body)
-	assert.Equal(s.T(), http.StatusCreated, resp.StatusCode)
+	assert.Equal(s.T(), http.StatusOK, resp.StatusCode)
 
 	body, err := ioutil.ReadAll(resp.Body)
 	assert.Nil(s.T(), err)
 	// nolint
 	defer resp.Body.Close()
 
-	response := response.Key{}
+	var response []response.Key
 	assert.Nil(s.T(), json.Unmarshal(body, &response))
-	assert.Equal(s.T(), 1, response.ID)
-	assert.NotEmpty(s.T(), response.Value)
-
-	_, err = uuid.FromString(response.Value)
-	assert.Nil(s.T(), err)
+	assert.Equal(s.T(), data.GetKeysResponse, response)
 }
 
-// TestCreateKey_AuthError makes test of `POST /keys` for Auth error case.
-func (s *CreateKeyTestSuite) TestCreateKey_AuthError() {
+// TestGetKeys_AuthError makes test of `GET /keys` for Auth error case.
+func (s *CreateKeyTestSuite) TestGetKeys_AuthError() {
+	assert.Nil(s.T(), s.fixtures.LoadGetGetKeysData())
+	defer func() {
+		assert.Nil(s.T(), s.fixtures.UnloadFixtures())
+	}()
+
 	req, err := http.NewRequestWithContext(
 		context.Background(),
-		http.MethodPost,
-		fmt.Sprintf("%s%s", os.Getenv("SERVICE_BASE_URL"), app.CreateKeyRoute),
+		http.MethodGet,
+		fmt.Sprintf("%s%s", os.Getenv("SERVICE_BASE_URL"), app.GetKeysRoute),
 		nil,
 	)
 	req.Header.Set("Authorization", "AdminKey incorrectkey")

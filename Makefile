@@ -83,8 +83,8 @@ service_start_dependencies:
 	@env PRIVATE_REPO_KEY="$$(cat ~/.ssh/id_rsa)" docker-compose $(DOCKER_COMPOSE_OPTIONS) up \
 	-d \
 	currency-exchange-service-fixer currency-exchange-service-postgres
-	@echo ">>> Sleeping 15 seconds until dependencies start."
-	@sleep 15
+	@echo ">>> Sleeping 10 seconds until dependencies start."
+	@sleep 10
 
 service_start_test: docker_build_image service_build service_start_dependencies goose_up
 	@echo ">>> Starting service."

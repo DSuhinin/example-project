@@ -1,8 +1,9 @@
 package app
 
 import (
-	"github.com/DSuhinin/passbase-test-task/core/errors"
 	"github.com/gin-gonic/gin"
+
+	"github.com/DSuhinin/passbase-test-task/core/errors"
 
 	"github.com/DSuhinin/passbase-test-task/app/config"
 	"github.com/DSuhinin/passbase-test-task/app/controller"

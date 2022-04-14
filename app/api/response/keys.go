@@ -4,15 +4,15 @@ import "github.com/DSuhinin/passbase-test-task/app/service/keys/model"
 
 // Key represents Key response object
 type Key struct {
-	ID  int    `json:"id"`
-	Key string `json:"key"`
+	ID    int    `json:"id"`
+	Value string `json:"value"`
 }
 
 // NewKey creates new response object for `POST /keys` endpoint.
 func NewKey(key *model.Key) Key {
 	return Key{
-		ID:  key.ID,
-		Key: key.Value,
+		ID:    key.ID,
+		Value: key.Value,
 	}
 }
 

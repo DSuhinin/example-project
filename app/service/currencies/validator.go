@@ -34,7 +34,7 @@ func ValidateCurrenciesExchangeRequest(req *request.CurrencyExchange) error {
 		)
 	}
 
-	if req.Amount == 0 {
+	if req.Amount <= 0 {
 		return errors.NewHTTPBadRequest(20020, "`amount` parameter should be grater then zero")
 	}
 

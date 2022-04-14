@@ -53,7 +53,7 @@ func ValidateKey(context *gin.Context, keyRepository dao.KeysRepositoryProvider)
 	context.Next()
 }
 
-// ValidateAdminKey validates that `Authorization: Admin Key` header has been provided and has correct value.
+// ValidateAdminKey validates that `Authorization: Admin Value` header has been provided and has correct value.
 func ValidateAdminKey(context *gin.Context, adminKey string) {
 	value := strings.Replace(context.GetHeader("Authorization"), "AdminKey ", "", -1)
 	if value == "" {
