@@ -96,6 +96,33 @@ func (s *RegenerateKeyTestSuite) TestRegenerateKey_OK() {
 	assert.NotEqual(s.T(), "e12a1983-046a-4f2c-b5a2-e27a6851ec4c", response.Value)
 }
 
+// TestRegenerateKey_NotFound_Error makes test of `GET /keys/:key_id/regenerate` for not found case.
+func (s *RegenerateKeyTestSuite) TestRegenerateKey_NotFound_Error() {
+	assert.Nil(s.T(), s.fixtures.LoadRegenerateKeyData())
+	defer func() {
+		assert.Nil(s.T(), s.fixtures.UnloadFixtures())
+	}()
+
+	req, err := http.NewRequestWithContext(
+		context.Background(),
+		http.MethodPut,
+		helper.StrReplace(
+			fmt.Sprintf("%s%s", os.Getenv("SERVICE_BASE_URL"), app.RegenerateKeyRoute),
+			[]string{":key_id"},
+			[]interface{}{-1},
+		),
+		nil,
+	)
+	req.Header.Set("Authorization", fmt.Sprintf("AdminKey %s", "supersecurekey"))
+	assert.Nil(s.T(), err)
+
+	client := http.Client{}
+	resp, err := client.Do(req)
+	assert.Nil(s.T(), err)
+	assert.NotNil(s.T(), resp.Body)
+	assert.Equal(s.T(), http.StatusNotFound, resp.StatusCode)
+}
+
 // TestRegenerateKey_AuthError makes test of `GET /keys/:key_id/regenerate` for Auth error case.
 func (s *CreateKeyTestSuite) TestRegenerateKey_AuthError() {
 	assert.Nil(s.T(), s.fixtures.LoadRegenerateKeyData())

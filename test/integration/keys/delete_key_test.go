@@ -82,6 +82,35 @@ func (s *DeleteKeyTestSuite) TestDeleteKey_OK() {
 	assert.Equal(s.T(), http.StatusNoContent, resp.StatusCode)
 }
 
+// TestDeleteKey_NotFoundError makes test of `DELETE /keys/:key_id` for not found case.
+func (s *DeleteKeyTestSuite) TestDeleteKey_NotFoundError() {
+	assert.Nil(s.T(), s.fixtures.LoadDeleteKeyData())
+	defer func() {
+		assert.Nil(s.T(), s.fixtures.UnloadFixtures())
+	}()
+
+	req, err := http.NewRequestWithContext(
+		context.Background(),
+		http.MethodDelete,
+		helper.StrReplace(
+			fmt.Sprintf("%s%s", os.Getenv("SERVICE_BASE_URL"), app.DeleteKeyRoute),
+			[]string{":key_id"},
+			[]interface{}{-1},
+		),
+		nil,
+	)
+	req.Header.Set("Authorization", fmt.Sprintf("AdminKey %s", "supersecurekey"))
+	assert.Nil(s.T(), err)
+
+	client := http.Client{}
+	resp, err := client.Do(req)
+	assert.Nil(s.T(), err)
+	assert.NotNil(s.T(), resp.Body)
+	//nolint
+	defer resp.Body.Close()
+	assert.Equal(s.T(), http.StatusNotFound, resp.StatusCode)
+}
+
 // TestDeleteKey_AuthError makes test of `DELETE /keys/:key_id` for Auth error case.
 func (s *CreateKeyTestSuite) TestDeleteKey_AuthError() {
 	assert.Nil(s.T(), s.fixtures.LoadDeleteKeyData())

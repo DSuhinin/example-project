@@ -18,6 +18,7 @@ require (
 	github.com/lib/pq v1.10.5 // indirect
 	github.com/mattn/go-isatty v0.0.14 // indirect
 	github.com/namsral/flag v1.7.4-pre
+	github.com/patrickmn/go-cache v2.1.0+incompatible // indirect
 	github.com/pkg/errors v0.9.1 // indirect
 	github.com/prometheus/client_golang v1.8.0
 	github.com/sarulabs/di v2.0.0+incompatible

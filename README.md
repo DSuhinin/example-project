@@ -7,6 +7,10 @@ Tools that should be installed before run/lint/test:
 - Docker
 - Golang
 
+### Features implemented
+- all basic functionality has been implemented.
+- all features were implemented.
+
 ### Repository Structure
 - `./app` - contains application itself.
 - `./build` - contains everything related to service build in Docker.
@@ -15,13 +19,14 @@ Tools that should be installed before run/lint/test:
 - `./test` - contains everything related to `integration` tests like: fixtures, test helpers, test data, etc.
 
 ### Useful Commands
-- `makefile lint` - to run linter over the code.
-- `makefile service_start_demo` - to run service that will be pointed to the `live` `fixer` service.
-- `makefile service_test` - to run `integration` tests over the service.
+- `make lint` - to run linter over the code.
+- `make service_start_demo` - to run service that will be pointed to the `live` `fixer` service.
+- `make service_stop` - stop service.
+- `make service_test` - to run `integration` tests over the service.
 
 ### How to play with the service
 
-- after `makefile service_start_demo` service should be available under `http://127.0.0.1:8080` host.
+- after `make service_start_demo` service should be available under `http://127.0.0.1:8080` host.
 - all endpoints could be found in `swagger` doc.
 - firstly `key` should be created through the `POST /keys` endpoint. All `keys` endpoints protected by `Authorization: AdminKey %placehoder for admin key%` header. 
 `AdminKey` value is by default equal to `supersecurekey` which could be configured in `./build/currency-exchange-service-demo.env` in `ADMIN_KEY` env variable.

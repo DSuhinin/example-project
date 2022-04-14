@@ -2,7 +2,9 @@ package main
 
 import (
 	"github.com/DSuhinin/passbase-test-task/app/service/currencies/fixer"
+	"github.com/patrickmn/go-cache"
 	log "github.com/sirupsen/logrus"
+	"time"
 
 	"github.com/DSuhinin/passbase-test-task/app"
 	"github.com/DSuhinin/passbase-test-task/app/config"
@@ -39,13 +41,16 @@ func main() {
 		log.Fatalf("error establishing connection to %s database: %+v", core.PostgresType, err)
 	}
 
-	// 4. create main router and run service.
+	// 4. init cache
+	cache := cache.New(5*time.Minute, 10*time.Minute)
+
+	// 5. create main router and run service.
 	router, err := app.NewRouter(appCfg, controller.New(
 		keys.NewService(
 			dao.NewKeysRepository(dbConnection),
 		),
 		currencies.NewService(
-			fixer.NewClient(appCfg.FixerAPIBaseURL, appCfg.FixerAPIKey),
+			fixer.NewClient(appCfg.FixerAPIBaseURL, appCfg.FixerAPIKey, cache),
 		),
 	), dao.NewKeysRepository(dbConnection))
 	if err != nil {
