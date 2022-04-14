@@ -2,13 +2,12 @@ package core
 
 import (
 	"fmt"
-	"github.com/pkg/errors"
 	"net/url"
 
+	"github.com/pkg/errors"
 	// nolint
 	_ "github.com/go-sql-driver/mysql"
 	"github.com/jmoiron/sqlx"
-
 	// nolint
 	_ "github.com/lib/pq"
 )

@@ -2,8 +2,10 @@ package currencies
 
 import (
 	"fmt"
-	"github.com/DSuhinin/passbase-test-task/app/api/request"
+
 	"github.com/DSuhinin/passbase-test-task/core/errors"
+
+	"github.com/DSuhinin/passbase-test-task/app/api/request"
 )
 
 // Currency constants

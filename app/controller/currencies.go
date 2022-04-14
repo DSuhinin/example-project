@@ -5,9 +5,10 @@ import (
 
 	"github.com/gin-gonic/gin"
 
+	"github.com/DSuhinin/passbase-test-task/core/errors"
+
 	"github.com/DSuhinin/passbase-test-task/app/api/request"
 	"github.com/DSuhinin/passbase-test-task/app/api/response"
-	"github.com/DSuhinin/passbase-test-task/core/errors"
 )
 
 // CurrenciesExchange handles `GET /currencies/exchange` route.

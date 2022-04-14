@@ -1,13 +1,14 @@
 package middleware
 
 import (
-	"github.com/DSuhinin/passbase-test-task/app/service/keys/dao"
 	"strconv"
 	"strings"
 
 	"github.com/gin-gonic/gin"
 
 	"github.com/DSuhinin/passbase-test-task/core/errors"
+
+	"github.com/DSuhinin/passbase-test-task/app/service/keys/dao"
 )
 
 // KeyIDPlaceholder is a Value ID placeholder.

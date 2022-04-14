@@ -1,9 +1,10 @@
 package keys
 
 import (
+	"github.com/DSuhinin/passbase-test-task/core/errors"
+
 	"github.com/DSuhinin/passbase-test-task/app/service/keys/dao"
 	"github.com/DSuhinin/passbase-test-task/app/service/keys/model"
-	"github.com/DSuhinin/passbase-test-task/core/errors"
 )
 
 // ServiceProvider provides Keys related operations.

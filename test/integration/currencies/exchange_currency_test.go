@@ -1,6 +1,6 @@
 // +build integration
 
-package keys
+package currencies
 
 import (
 	"context"
@@ -87,7 +87,7 @@ func (s *ExchangeCurrencyTestSuite) TestExchangeCurrency_OK() {
 }
 
 // TestExchangeCurrency_ValidationError makes test of `GET /currencies/exchange` for different validation error cases.
-func (s *CreateKeyTestSuite) TestExchangeCurrency_ValidationError() {
+func (s *ExchangeCurrencyTestSuite) TestExchangeCurrency_ValidationError() {
 
 	assert.Nil(s.T(), s.fixtures.LoadCurrencyExchangeData())
 	defer func() {
@@ -154,7 +154,7 @@ func (s *CreateKeyTestSuite) TestExchangeCurrency_ValidationError() {
 }
 
 // TestExchangeCurrency_AuthError makes test of `GET /currencies/exchange` for Auth error case.
-func (s *CreateKeyTestSuite) TestExchangeCurrency_AuthError() {
+func (s *ExchangeCurrencyTestSuite) TestExchangeCurrency_AuthError() {
 	assert.Nil(s.T(), s.fixtures.LoadCurrencyExchangeData())
 	defer func() {
 		assert.Nil(s.T(), s.fixtures.UnloadFixtures())
