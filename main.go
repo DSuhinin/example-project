@@ -1,18 +1,20 @@
 package main
 
 import (
-	"github.com/DSuhinin/passbase-test-task/app/service/currencies/fixer"
+	"time"
+
 	"github.com/patrickmn/go-cache"
 	log "github.com/sirupsen/logrus"
-	"time"
+
+	"github.com/DSuhinin/passbase-test-task/core"
 
 	"github.com/DSuhinin/passbase-test-task/app"
 	"github.com/DSuhinin/passbase-test-task/app/config"
 	"github.com/DSuhinin/passbase-test-task/app/controller"
 	"github.com/DSuhinin/passbase-test-task/app/service/currencies"
+	"github.com/DSuhinin/passbase-test-task/app/service/currencies/fixer"
 	"github.com/DSuhinin/passbase-test-task/app/service/keys"
 	"github.com/DSuhinin/passbase-test-task/app/service/keys/dao"
-	"github.com/DSuhinin/passbase-test-task/core"
 )
 
 // main entry point
