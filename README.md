@@ -1,5 +1,5 @@
-# passbase-test-task
-Passbase Currency Conversion Test Task
+# example-test-task
+Example Test Task
 
 ### Prerequisite
 Tools that should be installed before run/lint/test:
