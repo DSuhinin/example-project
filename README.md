@@ -1,15 +1,11 @@
 # example-test-task
-Example Test Task
+Example Project
 
 ### Prerequisite
 Tools that should be installed before run/lint/test:
 - Makefile
 - Docker
 - Golang
-
-### Features implemented
-- all basic functionality has been implemented.
-- all features were implemented.
 
 ### Repository Structure
 - `./app` - contains application itself.
